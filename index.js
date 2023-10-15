@@ -32,7 +32,13 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
 
-  
+    const chartersCollection = client.db('CA-Connect').collection('Chartere') ;
+
+    app.get('/search-charters/:name', async(req, res)=>{
+        const name = req.params.name ;
+        const findUser = await chartersCollection.find({$or: [ { name: { $regex: name, $options: "i" } }]}).toArray()
+        res.send(findUser)
+    })
 
 
     await client.db("admin").command({ ping: 1 });
